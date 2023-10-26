@@ -1,0 +1,11 @@
+### GET /
+GET http://localhost:3000/
+
+### GET /items
+GET http://localhost:3000/items
+
+### GET /items/:id
+GET http://localhost:3000/items/56
+
+### POST /items
+POST http://localhost:3000/items
