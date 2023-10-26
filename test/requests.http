@@ -9,3 +9,11 @@ GET http://localhost:3000/items/56
 
 ### POST /items
 POST http://localhost:3000/items
+Content-Type: application/json
+
+{"name": "kurkku"}
+
+### POST /items error
+POST http://localhost:3000/items
+
+{"jotain": "jotain"}

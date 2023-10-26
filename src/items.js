@@ -13,16 +13,46 @@ const getItems = (res) => {
 
 const getItemsById = (res, id) => {
   // TODO: if item with id exists send it, otherwise sen 404
-  res.writeHead(200, { "Content-Type": "application/json" });
-  // temp hardcoded response should be replaced with an item in mock data
-  const item = { id: 6, name: "omena" };
-  res.end(JSON.stringify(item));
+  console.log("getItemsById", id);
+  const item = items.find((element) => element.id == id);
+  if (item) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(item));
+  } else {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end('{ message: "Item not found." }');
+  }
 };
 
 const postItem = (req, res) => {
-  items.push({ id: Math.ceil(Math.random() * 100), name: "new item" });
-  res.writeHead(201, { "Content-Type": "application/json" });
-  res.end(`{"message": "New item added."}`);
+  let body = [];
+  req
+    .on("error", (err) => {
+      console.error(err);
+    })
+    .on("data", (chunk) => {
+      body.push(chunk);
+    })
+    .on("end", () => {
+      body = Buffer.concat(body).toString();
+      console.log("req body", body);
+      body = JSON.parse(body);
+      // check if body is "valid"
+      if (!body.name) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(`{"message": "Missing data."}`);
+        return;
+      }
+
+      // check id of the last item in items and add 1
+      const newId = items[items.length - 1].id + 1;
+      items.push({ id: newId, name: body.name });
+      res.writeHead(201, { "Content-Type": "application/json" });
+      res.end(`{"message": "New item added."}`);
+    });
 };
+
+//TODO: add deleteItem(), putItem() and routing for those in index.js
+// FINDILLA LÖYTÄÄ MITÄ POISTAMASSA SPLICELLA VOI POISTAA
 
 export { getItems, getItemsById, postItem };
