@@ -1,5 +1,11 @@
 import http from "http";
-import { getItems, getItemsById, postItem } from "./items.js";
+import {
+  getItems,
+  getItemsById,
+  postItem,
+  deleteItem,
+  putItem,
+} from "./items.js";
 const hostname = "127.0.0.1";
 const port = 3000;
 
@@ -22,6 +28,12 @@ const server = http.createServer((req, res) => {
   } else if (method === "POST" && reqParts[1] === "items") {
     console.log("POSTing a new item");
     postItem(req, res);
+  } else if (method === "DELETE" && reqParts[1] === "items" && reqParts[2]) {
+    console.log("DELETing item with id", reqParts[2]);
+    deleteItem(res, reqParts[2]);
+  } else if (method === "PUT" && reqParts[1] === "items" && reqParts[2]) {
+    console.log("PUTting item with id", reqParts[2]);
+    putItem(res, reqParts[2], req);
   } else {
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end('{"message": "404 Resource not found!"}');

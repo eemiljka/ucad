@@ -12,7 +12,6 @@ const getItems = (res) => {
 };
 
 const getItemsById = (res, id) => {
-  // TODO: if item with id exists send it, otherwise sen 404
   console.log("getItemsById", id);
   const item = items.find((element) => element.id == id);
   if (item) {
@@ -52,7 +51,46 @@ const postItem = (req, res) => {
     });
 };
 
-//TODO: add deleteItem(), putItem() and routing for those in index.js
-// FINDILLA LÖYTÄÄ MITÄ POISTAMASSA SPLICELLA VOI POISTAA
+const deleteItem = (res, id) => {
+  const index = items.findIndex((item) => item.id == id);
 
-export { getItems, getItemsById, postItem };
+  if (index !== -1) {
+    items.splice(index, 1);
+
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(`{"message": "Item with id ${id} deleted."}`);
+  } else {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(`{"message": "Item not found."}`);
+  }
+};
+
+const putItem = (res, id, req) => {
+  const item = items.find((element) => element.id == id);
+  if (item) {
+    let body = [];
+
+    req
+      .on("error", (err) => {
+        console.error(err);
+      })
+      .on("data", (chunk) => {
+        body.push(chunk);
+      })
+      .on("end", () => {
+        body = Buffer.concat(boody).toString();
+        console.log("req body", body);
+        body = JSON.parse(body);
+
+        item.name = body.name || item.name;
+
+        res.writeHead(200, { "Content-Type": "application(json" });
+        res.end(`{"message": "Item with id ${id} updated."}`);
+      });
+  } else {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(`{"message": "Item not found."}`);
+  }
+};
+
+export { getItems, getItemsById, postItem, deleteItem, putItem };
