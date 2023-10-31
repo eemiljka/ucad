@@ -78,7 +78,7 @@ const putItem = (res, id, req) => {
         body.push(chunk);
       })
       .on("end", () => {
-        body = Buffer.concat(boody).toString();
+        body = Buffer.concat(body).toString();
         console.log("req body", body);
         body = JSON.parse(body);
 
