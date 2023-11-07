@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import { getUsers } from "./user.js";
 import { getMedia } from "./media.js";
 import { getItemsById } from "./media.js";
+import { createMediaItem } from "./media.js";
 
 const hostname = "127.0.0.1";
 const app = express();
@@ -51,7 +52,7 @@ app.get("/api/media/:id", getItemsById);
 // modify
 app.put("/api/items/:id");
 // add new item
-//app.post("/api/items", postItem);
+app.post("/api/media", createMediaItem);
 // remove existing item
 app.delete("/api/items/:id");
 

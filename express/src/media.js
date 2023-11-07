@@ -69,11 +69,20 @@ const getItemsById = (req, res) => {
   }
 };
 
-app.post("/api/media", (req, res) => {
+let lastMediaId = 9632;
+
+const generateNewMediaId = () => {
+  lastMediaId++;
+  return lastMediaId;
+};
+
+const createMediaItem = (req, res) => {
   const newItem = req.body;
+
   newItem.media_id = generateNewMediaId();
   mediaItems.push(newItem);
-  res.status(201).json(newItem);
-});
 
-export { getMedia, getItemsById };
+  res.status(201).json(newItem);
+};
+
+export { getMedia, getItemsById, createMediaItem };

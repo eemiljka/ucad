@@ -1,0 +1,33 @@
+### GET /
+GET http://localhost:3000/
+
+### GET /items
+GET http://localhost:3000/api/items?limit=x
+
+### GET /media/:id
+GET http://localhost:3000/api/media/9632
+
+### GET /kukkuu
+GET http://localhost:3000/kukkuu
+
+### GET /something-else
+GET http://localhost:3000/morjes
+
+### GET all users
+GET http://localhost:3000/api/user
+
+### GET all media items
+GET http://localhost:3000/api/media
+
+### POST new media item
+POST http://localhost:3000/api/media
+Content-Type: application/json
+
+{
+  "filename": "newfile.jpg",
+  "filesize": 12345,
+  "title": "New Item",
+  "description": "Description for the new item",
+  "user_id": 1234,
+  "media_type": "image/jpeg"
+}
