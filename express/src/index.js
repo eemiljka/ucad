@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getUsers } from "./user.js";
+import { getUsers, getUserById, createUser } from "./user.js";
 import { getMedia } from "./media.js";
 import { getItemsById } from "./media.js";
 import { createMediaItem } from "./media.js";
@@ -45,24 +45,23 @@ app.get("/:message", (req, res) => {
   res.render("home", values);
 });
 
-// example generic items api
-
-// get all items
-app.get("/api/items", getMedia);
-// get items by id
+// MEDIA
+app.get("/api/media", getMedia);
+// get media items by id
 app.get("/api/media/:id", getItemsById);
-// add new item
+// add new media item
 app.post("/api/media", createMediaItem);
-// remove existing item
+// remove existing media item
 app.delete("/api/media/:id", deleteMediaItem);
-// modify existing item
+// modify existing media item
 app.put("/api/media/:id", modifyMediaItem);
 
-// media endpoints
-app.get("/api/media", getMedia);
-
-// user endpoints
+// USER
 app.get("/api/user", getUsers);
+// get user by id
+app.get("/api/user/:id", getUserById);
+// add new user
+app.post("/api/user", createUser);
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);

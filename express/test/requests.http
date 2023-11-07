@@ -43,3 +43,13 @@ Content-Type: application/json
   "title": "Basement modified",
   "description": "Some new description"
 }
+
+### POST new user
+POST http://localhost:3000/api/user
+Content-Type: application/json
+
+{
+      "username": "NEWUSER",
+      "password": "********",
+      "email": "newuser@example.com"
+    }
