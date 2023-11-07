@@ -45,4 +45,18 @@ const deleteUser = (req, res) => {
   }
 };
 
-export { getUsers, getUserById, createUser, deleteUser };
+const modifyUser = (req, res) => {
+  const userId = parseInt(req.params.id);
+  const updatedUser = req.body;
+
+  const index = users.findIndex((user) => user.user_id === userId);
+
+  if (index !== -1) {
+    users[index] = { ...users[index], ...updatedUser };
+    res.json(users[index]);
+  } else {
+    res.status(404).json({ message: "User not found" });
+  }
+};
+
+export { getUsers, getUserById, createUser, deleteUser, modifyUser };

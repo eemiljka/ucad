@@ -56,3 +56,13 @@ Content-Type: application/json
 
 ### DELETE user
 DELETE http://localhost:3000/api/user/260
+
+### PUT /api/user/:id
+PUT http://localhost:3000/api/user/260
+Content-Type: application/json
+
+{
+      "username": "MODIFIED",
+      "password": "********",
+      "email": "MODIFIED@example.com"
+    }

@@ -1,7 +1,13 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getUsers, getUserById, createUser, deleteUser } from "./user.js";
+import {
+  getUsers,
+  getUserById,
+  createUser,
+  deleteUser,
+  modifyUser,
+} from "./user.js";
 import { getMedia } from "./media.js";
 import { getItemsById } from "./media.js";
 import { createMediaItem } from "./media.js";
@@ -64,6 +70,8 @@ app.get("/api/user/:id", getUserById);
 app.post("/api/user", createUser);
 // remove existing user
 app.delete("/api/user/:id", deleteUser);
+// modify existing user
+app.put("/api/user/:id", modifyUser);
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
