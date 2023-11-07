@@ -32,4 +32,17 @@ const createUser = (req, res) => {
   res.status(201).json(newUser);
 };
 
-export { getUsers, getUserById, createUser };
+const deleteUser = (req, res) => {
+  const userId = parseInt(req.params.id);
+
+  const index = users.findIndex((user) => user.user_id === userId);
+
+  if (index !== -1) {
+    const deletedUser = users.splice(index, 1)[0];
+    res.json(deletedUser);
+  } else {
+    res.status(404).json({ message: "User not found" });
+  }
+};
+
+export { getUsers, getUserById, createUser, deleteUser };
