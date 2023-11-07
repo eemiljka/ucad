@@ -47,7 +47,7 @@ app.get("/:message", (req, res) => {
 // get all items
 app.get("/api/items", getMedia);
 // get items by id
-app.get("/api/items/:id", getItemsById);
+app.get("/api/media/:id", getItemsById);
 // modify
 app.put("/api/items/:id");
 // add new item

@@ -56,19 +56,6 @@ const getMedia = (req, res) => {
   res.json(mediaItems);
 };
 
-/*const getItemsById = (req, res) => {
-  // if item with id exists send it, otherwise send 404
-  console.log("getItemsById", req.params);
-  const item = mediaItems.find((element) => element.media_id == req.params.id);
-  if (item) {
-    res.status(200);
-    res.json(item);
-  } else {
-    res.status(404);
-    res.json({ message: "Item not found." });
-  }
-};*/
-
 const getItemsById = (req, res) => {
   console.log("Request for media_id:", req.params.id);
   const mediaId = parseInt(req.params.id);
@@ -81,5 +68,12 @@ const getItemsById = (req, res) => {
     res.status(404).json({ message: "Media item not found" });
   }
 };
+
+app.post("/api/media", (req, res) => {
+  const newItem = req.body;
+  newItem.media_id = generateNewMediaId();
+  mediaItems.push(newItem);
+  res.status(201).json(newItem);
+});
 
 export { getMedia, getItemsById };
