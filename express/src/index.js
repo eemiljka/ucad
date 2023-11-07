@@ -25,6 +25,7 @@ app.set("views", "src/views");
 
 app.use(express.json());
 app.use("/docs", express.static(path.join(__dirname, "../docs")));
+app.use("/media", express.static(path.join(__dirname, "/media")));
 
 // simple custom middleware for logging/debugging all requests
 app.use((req, res, next) => {
