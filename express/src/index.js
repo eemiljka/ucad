@@ -5,6 +5,8 @@ import { getUsers } from "./user.js";
 import { getMedia } from "./media.js";
 import { getItemsById } from "./media.js";
 import { createMediaItem } from "./media.js";
+import { deleteMediaItem } from "./media.js";
+import { modifyMediaItem } from "./media.js";
 
 const hostname = "127.0.0.1";
 const app = express();
@@ -49,58 +51,15 @@ app.get("/:message", (req, res) => {
 app.get("/api/items", getMedia);
 // get items by id
 app.get("/api/media/:id", getItemsById);
-// modify
-app.put("/api/items/:id");
 // add new item
 app.post("/api/media", createMediaItem);
 // remove existing item
-app.delete("/api/items/:id");
+app.delete("/api/media/:id", deleteMediaItem);
+// modify existing item
+app.put("/api/media/:id", modifyMediaItem);
 
 // media endpoints
 app.get("/api/media", getMedia);
-
-/*app.get("/api/media/:id", (req, res) => {
-  const mediaId = parseInt(req.params.id);
-  const mediaItem = mediaItems.find((item) => item.media_id === mediaId);
-
-  if (mediaItem) {
-    res.json(mediaItem);
-  } else {
-    res.status(404).json({ message: "Media item not found" });
-  }
-});
-
-app.post("/api/media", (req, res) => {
-  const newItem = req.body;
-  newItem.media_id = generateNewMediaId();
-  mediaItems.push(newItem);
-  res.status(201).json(newItem);
-});
-
-app.put("/api/media/:id", (req, res) => {
-  const mediaId = parseInt(req.params.id);
-  const updatedItem = req.body;
-
-  const index = mediaItems.findIndex((item) => item.media_id === mediaId);
-  if (index !== -1) {
-    mediaItems[index] = { ...mediaItems[index], ...updatedItem };
-    res.json(mediaItems[index]);
-  } else {
-    res.status(404).json({ message: "Media item not found" });
-  }
-});
-
-app.delete("/api/media/:id", (req, res) => {
-  const mediaId = parseInt(req.params.id);
-  const index = mediaItems.findIndex((item) => item.media_id === mediaId);
-
-  if (index !== -1) {
-    const deletedItem = mediaItems.splice(index, 1)[0];
-    res.json(deletedItem);
-  } else {
-    res.status(404).json({ message: "Media item not found" });
-  }
-});*/
 
 // user endpoints
 app.get("/api/user", getUsers);

@@ -85,4 +85,37 @@ const createMediaItem = (req, res) => {
   res.status(201).json(newItem);
 };
 
-export { getMedia, getItemsById, createMediaItem };
+const deleteMediaItem = (req, res) => {
+  const mediaId = parseInt(req.params.id);
+
+  const index = mediaItems.findIndex((item) => item.media_id === mediaId);
+
+  if (index !== -1) {
+    const deletedItem = mediaItems.splice(index, 1)[0];
+    res.json(deletedItem);
+  } else {
+    res.status(404).json({ message: "Media item not found" });
+  }
+};
+
+const modifyMediaItem = (req, res) => {
+  const mediaId = parseInt(req.params.id);
+  const updatedItem = req.body;
+
+  const index = mediaItems.findIndex((item) => item.media_id === mediaId);
+
+  if (index !== -1) {
+    mediaItems[index] = { ...mediaItems[index], ...updatedItem };
+    res.json(mediaItems[index]);
+  } else {
+    res.status(404).json({ message: "Media item not found" });
+  }
+};
+
+export {
+  getMedia,
+  getItemsById,
+  createMediaItem,
+  deleteMediaItem,
+  modifyMediaItem,
+};

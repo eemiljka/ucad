@@ -31,3 +31,15 @@ Content-Type: application/json
   "user_id": 1234,
   "media_type": "image/jpeg"
 }
+
+### DELETE media item
+DELETE http://localhost:3000/api/media/9632
+
+### PUT /api/media/:id
+PUT http://localhost:3000/api/media/9590
+Content-Type: application/json
+
+{
+  "title": "Basement modified",
+  "description": "Some new description"
+}
