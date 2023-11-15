@@ -2,15 +2,19 @@ import express from "express";
 import {
   getMedia,
   getMediaById,
-  PostMedia,
-  PutMedia,
+  postMedia,
+  putMedia,
   deleteMedia,
 } from "../controllers/media-controller.mjs";
+import { logger } from "../middlewares/middlewares.mjs";
 
 const mediaRouter = express.Router();
+const upload = multer({ dest: "uploads/" });
 
-mediaRouter.route("/").get(getMedia).post(PostMedia);
+// router specific middleware
+// mediaRouter.use(logger);
 
-mediaRouter.route("/:id").get(getMediaById).put(PutMedia).delete(deleteMedia);
+mediaRouter.route("/").get(getMedia).post(upload.single("file"), postMedia);
+mediaRouter.route("/:id").get(getMediaById).put(putMedia).delete(deleteMedia);
 
 export default mediaRouter;
