@@ -1,3 +1,5 @@
+import db from "../utils/database.mjs";
+
 // mock data
 const mediaItems = [
   {
@@ -22,24 +24,51 @@ const mediaItems = [
   },
 ];
 
-const listAllMedia = () => {
-  return mediaItems;
+const listAllMedia = async () => {
+  try {
+    const [rows] = await db.promise().query("SELECT * FROM mediaItems");
+    console.log("rows", rows);
+    return rows;
+  } catch (e) {
+    console.error("error", e.message);
+    return { error: e.message };
+  }
 };
 
-const findMediaById = (id) => {
-  return mediaItems.find((item) => item.media_id == id);
+const findMediaById = async (id) => {
+  try {
+    const [rows] = await db
+      .promise()
+      .query("SELECT * FROM mediaItems WHERE media_id = ?", [id]);
+
+    if (rows.length > 0) {
+      return rows[0];
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.error("Error in findMediaById:", e.message);
+    throw e;
+  }
 };
 
-const addMedia = (media) => {
+const addMedia = async (media) => {
   const { filename, title, description, user_id } = media;
-  const newId = mediaItems[0].media_id + 1;
-  mediaItems.unshift({
-    media_id: newId,
-    filename,
-    title,
-    description,
-    user_id,
-  });
+
+  try {
+    const [result] = await db
+      .promise()
+      .query(
+        "INSERT INTO mediaItems (filename, title, description, user_id) VALUES (?, ?, ?, ?)",
+        [filename, title, description, user_id]
+      );
+
+    const newMediaId = result.insertId;
+    return { media_id: newMediaId };
+  } catch (e) {
+    console.error("Error in addMedia:", e.message);
+    throw e;
+  }
 };
 
 export { listAllMedia, findMediaById, addMedia };
