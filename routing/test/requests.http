@@ -5,6 +5,11 @@ Content-Type: application/json
 
 {"username": "JohnDoe", "password": "to-be-hashed-pw1"}
 
+### Get my user info
+GET http://localhost:3000/api/auth/me
+Authorization: Bearer <put-your-token-from-login-response-here>
+
+
 # Media sharing api http test requests
 
 ## /api/media endpoit
