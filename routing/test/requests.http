@@ -1,3 +1,10 @@
+##auth/login
+### POST /api/auth/login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{"username": "JohnDoe", "password": "to-be-hashed-pw1"}
+
 # Media sharing api http test requests
 
 ## /api/media endpoit
