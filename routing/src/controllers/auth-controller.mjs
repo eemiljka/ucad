@@ -3,14 +3,17 @@ import "dotenv/config";
 import { login } from "../models/user-model.mjs";
 
 const postLogin = async (req, res) => {
-  //TODO: use model to query sql for user info (username/pw)
+  // TODO: use model to query sql for user info (username/pw)
   const user = await login(req.body);
+  if (user.error) {
+    return next(new Error(result.error));
+  }
   console.log("postLogin", user);
   try {
     const token = jwt.sign(user, process.env.JWT_SECRET);
-    res.json({ message: "logged in", token: user });
+    res.json({ message: "logged in", token, user });
   } catch (error) {
-    res.status(401).json({ message: "invalid usernme/password" });
+    res.status(401).json({ message: "invalid username/password" });
   }
 };
 

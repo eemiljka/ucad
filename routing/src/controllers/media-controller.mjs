@@ -1,63 +1,10 @@
-// can be placed to a separate json file
-
+import { validationResult } from "express-validator";
 import {
   fetchAllMedia,
   fetchMediaById,
   addMedia,
+  updateMedia,
 } from "../models/media-model.mjs";
-
-const mediaItems = [
-  {
-    media_id: 9632,
-    filename: "ffd8.jpg",
-    filesize: 887574,
-    title: "Favorite drink",
-    description: "",
-    user_id: 1606,
-    media_type: "image/jpeg",
-    created_at: "2023-10-16T19:00:09.000Z",
-  },
-  {
-    media_id: 9626,
-    filename: "dbbd.jpg",
-    filesize: 60703,
-    title: "Miika",
-    description: "My Photo",
-    user_id: 3671,
-    media_type: "image/jpeg",
-    created_at: "2023-10-13T12:14:26.000Z",
-  },
-  {
-    media_id: 9625,
-    filename: "2f9b.jpg",
-    filesize: 30635,
-    title: "Aksux",
-    description: "friends",
-    user_id: 260,
-    media_type: "image/jpeg",
-    created_at: "2023-10-12T20:03:08.000Z",
-  },
-  {
-    media_id: 9592,
-    filename: "f504.jpg",
-    filesize: 48975,
-    title: "Desert",
-    description: "",
-    user_id: 3609,
-    media_type: "image/jpeg",
-    created_at: "2023-10-12T06:59:05.000Z",
-  },
-  {
-    media_id: 9590,
-    filename: "60ac.jpg",
-    filesize: 23829,
-    title: "Basement",
-    description: "Light setup in basement",
-    user_id: 305,
-    media_type: "image/jpeg",
-    created_at: "2023-10-12T06:56:41.000Z",
-  },
-];
 
 const getMedia = async (req, res) => {
   const mediaItems = await fetchAllMedia();
@@ -78,8 +25,15 @@ const getMediaById = async (req, res) => {
 };
 
 const postMedia = async (req, res) => {
-  console.log("uploaded file", req.file);
-  console.log("uploaded form data", req.body);
+  if (!req.file) {
+    return res.status(400).json({ message: "file missing or invalid" });
+  }
+  const errors = validationResult(req);
+  if (!errors.isEmpty) {
+    return res.status(400).json({ message: "invalid input fields" });
+  }
+  //console.log("uploaded file", req.file);
+  //console.log("uploaded form data", req.body);
   const { title, description } = req.body;
   const { filename, mimetype, size } = req.file;
   // req.user is added by authenticateToken middleware
@@ -94,14 +48,48 @@ const postMedia = async (req, res) => {
   }
 };
 
-const putMedia = (req, res) => {
-  // to be completed
-  res.sendStatus(200);
+const putMedia = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log("validation errors", errors.array());
+    const error = new Error("invalid input fields");
+    error.status = 403;
+    return next(error);
+  }
+  const id = req.params.id;
+  const user_id = req.user.user_id;
+  const levelId = req.user.user_level_id;
+  const { filename, title, description } = req.body;
+  if (filename && title && description && user_id) {
+    const updatedMedia = { filename, title, description, user_id };
+    const result = await changeMedia(updatedMedia, id, levelId);
+    if (result.error) {
+      const error = new Error(result.error);
+      error.status = result.status || 500;
+      return next(error);
+    }
+    res.status(201);
+    res.json({ message: "Media updated", ...result });
+  }
 };
 
-const deleteMedia = (req, res) => {
-  // to be completed
-  res.sendStatus(200);
+const deleteMedia = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log("validation errors", errors.array());
+    const error = new Error("not found or unauthorized");
+    error.status = 403;
+    return next(error);
+  }
+  const user_id = req.user.user_id;
+  const levelId = req.user.user_level_id;
+  const result = await removeMedia(req.params.id, user_id, levelId);
+  if (result.error) {
+    const error = new Error(result.error);
+    error.status = result.status || 500;
+    return next(error);
+  }
+  res.status(204).json({ message: "Media deleted", ...result });
 };
 
 export { getMedia, getMediaById, postMedia, putMedia, deleteMedia };

@@ -5,6 +5,7 @@ import mediaRouter from "./routes/media-router.mjs";
 import userRouter from "./routes/user-router.mjs";
 import { logger } from "./middlewares/middlewares.mjs";
 import authRouter from "./routes/auth-router.mjs";
+import { notFoundHandler, errorHandler } from "./middlewares/middlewares.mjs";
 
 const hostname = "127.0.0.1";
 const app = express();
@@ -41,6 +42,9 @@ app.use("/api/media", mediaRouter);
 
 // user endpoints
 app.use("/api/users", userRouter);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);

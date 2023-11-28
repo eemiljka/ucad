@@ -39,4 +39,23 @@ const addMedia = async (media) => {
   }
 };
 
-export { fetchAllMedia, fetchMediaById, addMedia };
+const updateMedia = async (mediaId, newData, userIdFromToken) => {
+  const isOwner = await checkMediaOwnershipInDatabase(mediaId, userIdFromToken);
+
+  if (!isOwner) {
+    throw new Error("Unauthorized: You do not own this media item.");
+  }
+  const updateQuery =
+    "UPDATE MediaItems SET title = ?, description = ? WHERE media_id = ?";
+  const values = [newData.title, newData.description, mediaId];
+  try {
+    await executeQuery(updateQuery, values);
+    const updatedMediaQuery = "SELECT * FROM MediaItems WHERE media_id = ?";
+    const updatedMediaData = await executeQuery(updatedMediaQuery, [mediaId]);
+    return updatedMediaData[0];
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { fetchAllMedia, fetchMediaById, addMedia, updateMedia };
