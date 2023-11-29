@@ -84,9 +84,9 @@ POST http://localhost:3000/api/users
 content-type: application/json
 
 {
-  "username": "Ner",
+  "username": "Nesdfsdfsdfr",
   "password": "newsecret",
-  "email": "newussdfsdf"
+  "email": "newussdfsdf@gmail.com"
 }
 
 ### Post users FAIL

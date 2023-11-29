@@ -2,8 +2,10 @@ import { promisePool } from "../utils/database.mjs";
 
 const fetchAllMedia = async () => {
   try {
-    const [rows] = await promisePool.query("SELECT * FROM mediaItems");
-    console.log("rows", rows);
+    const result = await promisePool.query("SELECT * FROM MediaItems");
+    const [rows] = result; // first item in result array is the data rows
+    //console.log(result);
+    //console.log('rows', rows);
     return rows;
   } catch (e) {
     console.error("error", e.message);
@@ -13,20 +15,29 @@ const fetchAllMedia = async () => {
 
 const fetchMediaById = async (id) => {
   try {
-    const sql = "SELECT * FROM mediaItems WHERE media_id=?";
+    // TODO: replace * with specific column names needed in this case
+    const sql = `SELECT media_id, filename, filesize, media_type, title, description, MediaItems.created_at, Users.user_id, username
+                 FROM MediaItems JOIN Users ON MediaItems.user_id = Users.user_id
+                 WHERE media_id=?`;
     const params = [id];
     const [rows] = await promisePool.query(sql, params);
     console.log("rows", rows);
-    return rows;
+    return rows[0];
   } catch (e) {
     console.error("error", e.message);
     return { error: e.message };
   }
 };
 
+/**
+ * Add new media item to database
+ *
+ * @param {object} media - object containing all information about the new media item
+ * @returns {object} - object containing id of the inserted media item in db
+ */
 const addMedia = async (media) => {
   const { user_id, filename, size, mimetype, title, description } = media;
-  const sql = `INSERT INTO mediaItems (user_id, filename, filesize, media_type, title, description)
+  const sql = `INSERT INTO MediaItems (user_id, filename, filesize, media_type, title, description)
                VALUES (?, ?, ?, ?, ?, ?)`;
   const params = [user_id, filename, size, mimetype, title, description];
   try {
@@ -39,23 +50,4 @@ const addMedia = async (media) => {
   }
 };
 
-const updateMedia = async (mediaId, newData, userIdFromToken) => {
-  const isOwner = await checkMediaOwnershipInDatabase(mediaId, userIdFromToken);
-
-  if (!isOwner) {
-    throw new Error("Unauthorized: You do not own this media item.");
-  }
-  const updateQuery =
-    "UPDATE MediaItems SET title = ?, description = ? WHERE media_id = ?";
-  const values = [newData.title, newData.description, mediaId];
-  try {
-    await executeQuery(updateQuery, values);
-    const updatedMediaQuery = "SELECT * FROM MediaItems WHERE media_id = ?";
-    const updatedMediaData = await executeQuery(updatedMediaQuery, [mediaId]);
-    return updatedMediaData[0];
-  } catch (error) {
-    throw error;
-  }
-};
-
-export { fetchAllMedia, fetchMediaById, addMedia, updateMedia };
+export { fetchAllMedia, fetchMediaById, addMedia };

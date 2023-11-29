@@ -6,17 +6,17 @@ import {
   postMedia,
   putMedia,
 } from "../controllers/media-controller.mjs";
+import { logger } from "../middlewares/middlewares.mjs";
 import { authenticateToken } from "../middlewares/authentication.mjs";
 import { body } from "express-validator";
 import upload from "../middlewares/upload.mjs";
-import { checkMediaOwnership } from "../middlewares/authorization.mjs";
 
 const mediaRouter = express.Router();
 
 // router specific middleware
-// mediaRouter.use(logger);
+//mediaRouter.use(logger);
 
-//TODO: check and add authenticatio where needed
+// TODO: check and add authentication where needed
 mediaRouter
   .route("/")
   .get(getMedia)
@@ -30,10 +30,5 @@ mediaRouter
   );
 
 mediaRouter.route("/:id").get(getMediaById).put(putMedia).delete(deleteMedia);
-
-mediaRouter
-  .route("/api/media/:id")
-  .put(checkMediaOwnership, putMedia)
-  .delete(checkMediaOwnership, deleteMedia);
 
 export default mediaRouter;
