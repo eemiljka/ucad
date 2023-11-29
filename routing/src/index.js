@@ -15,6 +15,9 @@ const __dirname = path.dirname(__filename);
 
 app.set("view engine", "pug");
 app.set("views", "src/views");
+//Remove x-powered-by header
+app.disable("x-powered-by");
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/docs", express.static(path.join(__dirname, "../docs")));

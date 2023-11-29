@@ -1,6 +1,6 @@
 import { promisePool } from "../utils/database.mjs";
 
-const fetchAllUsers = async () => {
+/*const fetchAllUsers = async () => {
   try {
     const [rows] = await promisePool.query("SELECT * FROM Users");
     console.log("rows", rows);
@@ -25,7 +25,7 @@ const fetchUserById = async (id) => {
     console.error("error", e.message);
     return { error: e.message };
   }
-};
+};*/
 
 /**
  * Fetch user from database based on user name/password pair
@@ -67,7 +67,7 @@ const addUser = async (user) => {
   }
 };
 
-const updateUser = async (userId, newData, userIdFromToken) => {
+/*const updateUser = async (userId, newData, userIdFromToken) => {
   if (userIdFromToken !== userId) {
     throw new Error(
       "Unauthorized: You do not have permission to modify this user's data."
@@ -84,21 +84,14 @@ const updateUser = async (userId, newData, userIdFromToken) => {
   } catch (error) {
     throw error;
   }
-};
+};*/
 
-const checkMediaOwnershipInDatabase = async (mediaId, userId) => {
+/*const checkMediaOwnershipInDatabase = async (mediaId, userId) => {
   const query =
     "SELECT COUNT(*) AS count FROM Media WHERE media_id = ? AND user_id = ?";
   const result = await promisePool(query, [mediaId, userId]);
 
   return result[0].count > 0;
-};
+};*/
 
-export {
-  login,
-  addUser,
-  updateUser,
-  fetchAllUsers,
-  fetchUserById,
-  checkMediaOwnershipInDatabase,
-};
+export { login, addUser };

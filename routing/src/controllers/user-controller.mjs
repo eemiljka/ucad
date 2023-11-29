@@ -1,11 +1,18 @@
 import { validationResult } from "express-validator";
+import bcrypt from "bcryptjs";
+import { addUser } from "../models/user-model.js";
 
 const postUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ message: "invalid input fields" });
   }
-  const newUserId = await addUser(req.body);
+  const newUser = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newUser.password, salt);
+  newUser.password = hashedPassword;
+  console.log("postUser", newUser);
+  const newUserId = await addUser(newUser);
   res.status(201).json({ message: "User added", user_id: newUserId });
 };
 
