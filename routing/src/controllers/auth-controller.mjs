@@ -3,6 +3,19 @@ import "dotenv/config";
 import { login } from "../models/user-model.mjs";
 import bcrypt from "bcryptjs";
 
+/**
+ * @api {post} /login Login
+ * @apiName Login
+ * @apiGroup Authentication
+ *
+ * @apiParam {String} username User's username.
+ * @apiParam {String} password User's password.
+ *
+ * @apiSuccess {String} message Success message.
+ * @apiSuccess {String} token Authentication token.
+ * @apiSuccess {Object} user User information.
+ */
+
 const postLogin = async (req, res, next) => {
   // TODO: input validation
   const user = await login(req.body.username);
@@ -29,6 +42,14 @@ const postLogin = async (req, res, next) => {
     return next(error);
   }
 };
+
+/**
+ * @api {get} /me Get Logged-in User Information
+ * @apiName GetMe
+ * @apiGroup Authentication
+ *
+ * @apiSuccess {Object} user User information.
+ */
 
 const getMe = (req, res) => {
   console.log("getMe user", req.user);

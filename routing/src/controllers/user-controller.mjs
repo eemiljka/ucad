@@ -2,6 +2,21 @@ import { validationResult } from "express-validator";
 import { addUser } from "../models/user-model.mjs";
 import bcrypt from "bcryptjs";
 
+/**
+ * @api {post} /users Create a new user
+ * @apiName PostUser
+ * @apiGroup Users
+ *
+ * @apiParam {String} username User's username.
+ * @apiParam {String} password User's password.
+ * @apiParam {String} [otherField] Other optional field.
+ *
+ * @apiSuccess {String} message Success message.
+ * @apiSuccess {String} user_id ID of the newly created user.
+ * @apiError (400) {Object} error Bad Request error.
+ * @apiError (500) {Object} error Internal Server Error.
+ */
+
 const postUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -18,7 +33,13 @@ const postUser = async (req, res) => {
   res.status(201).json({ message: "user added", user_id: newUserId });
 };
 
-// Following functions are just stubs at the moment
+/**
+ * @api {get} /users Get all users
+ * @apiName GetUsers
+ * @apiGroup Users
+ *
+ * @apiSuccess {Object} users Object containing information about all users.
+ */
 
 const getUsers = (req, res) => {
   res.json({ users: "get" });
