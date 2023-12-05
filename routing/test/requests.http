@@ -4,7 +4,7 @@
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
-{"username": "JohnDoe", "password": "to-be-hashed-pw1"}
+{"username": "uusi1", "password": "uusiyksi"}
 
 ### Get my user info
 GET http://localhost:3000/api/auth/me
@@ -74,7 +74,7 @@ DELETE http://localhost:3000/api/media/9590
 GET http://localhost:3000/api/users
 
 ### Get user by id
-GET http://localhost:3000/api/users/260
+GET http://localhost:3000/api/users/16
 
 ### Get user by id FAIL
 GET http://localhost:3000/api/users/959099
@@ -84,9 +84,9 @@ POST http://localhost:3000/api/users
 content-type: application/json
 
 {
-  "username": "Nesdfsdfsdfr",
-  "password": "newsecret",
-  "email": "newussdfsdf@gmail.com"
+  "username": "uusi1",
+  "password": "uusiyksi",
+  "email": "uusi@example.com"
 }
 
 ### Post users FAIL
